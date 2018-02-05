@@ -14,14 +14,25 @@
 
 
 <ion-content padding>
-  <ion-card>
+  <!-- <ion-card>
     <h2>{{ user.name }}</h2>
     <img [src]="user.image" *ngIf="user.image">
-  </ion-card>
+  </ion-card> -->
 
   <ion-list>
-    <ion-item *ngFor="let person of userList">
+    <ion-item *ngFor="let person of userList; let pos = index" (click)=showUsers(pos)>
       <h2>{{ person.name.first }} {{ person.name.last | uppercase}}</h2>
+      <img [src]="person.picture.large" *ngIf="pos==userSelectedIndex">
     </ion-item>
   </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-refresher (ionRefresh)="refreshUsers($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
 </ion-content>

@@ -23,6 +23,7 @@ export class RandomUserPage {
     image: null
   };
 
+  public userSelectedIndex;
   public userList = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http) {
@@ -39,9 +40,27 @@ export class RandomUserPage {
     this.loadUsers();
   }
 
+  showUsers(pos) {
+    this.userSelectedIndex = pos;
+  }
+
   loadUsers() {
     this.http.get(this.url + '?results=10').subscribe((response) => {
       this.userList = response.json().results;
+    });
+  }
+
+  loadMore(infiniteScroll) {
+    this.http.get(this.url + '?results=10').subscribe((response) => {
+      this.userList = this.userList.concat(response.json().results);
+      infiniteScroll.complete();
+    });
+  }
+
+  refreshUsers(refresher) {
+    this.http.get(this.url + '?results=10').subscribe((response) => {
+      this.userList = response.json().results.concat(this.userList);
+      refresher.complete();
     });
   }
 
