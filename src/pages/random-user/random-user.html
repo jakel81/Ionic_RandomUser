@@ -10,6 +10,24 @@
     <ion-title>randomUser</ion-title>
   </ion-navbar>
 
+  <ion-list>
+    <ion-item>
+      <ion-label>Sexe</ion-label>
+      <ion-select full [(ngModel)]="selectGender" cancelText="Annuler">
+        <ion-option value="all">Tous</ion-option>
+        <ion-option value="male">Homme</ion-option>
+        <ion-option value="female">Femme</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Nationalité</ion-label>
+      <ion-select full [(ngModel)]="selectCountry" (ionChange)="onCountry($event)" cancelText="Annuler" multiple>
+        <ion-option *ngFor="let country of countries" [value]="country.code">{{country.label}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
 </ion-header>
 
 

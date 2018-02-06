@@ -1,3 +1,5 @@
+import { VelibMapPage } from './../pages/velib-map/velib-map';
+import { VelibPage } from './../pages/velib/velib';
 import { RandomUserPage } from './../pages/random-user/random-user';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
@@ -15,7 +17,7 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any }>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
@@ -24,7 +26,9 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'List', component: ListPage },
-      { title: 'RandomUser', component: RandomUserPage}
+      { title: 'RandomUser', component: RandomUserPage },
+      { title: 'Velib', component: VelibPage }
+
     ];
 
   }

@@ -23,45 +23,85 @@ export class RandomUserPage {
     image: null
   };
 
+  public countries = [
+    { code: 'fr', label: 'France' },
+    { code: 'gb', label: 'Royaume unis' },
+    { code: 'us', label: 'Etats-unis' },
+    { code: 'ch', label: 'Suisse' },
+    { code: 'nz', label: 'Nouvelle Zélande' },
+    { code: 'nl', label: 'Hollande' },
+    { code: 'de', label: 'Allemagne' },
+    { code: 'dk', label: 'Danemark' },
+    { code: 'es', label: 'Espagne' },
+    { code: 'br', label: 'Brésil' },
+  ];
+
   public userSelectedIndex;
   public userList = [];
+  public selectGender = "all";
+  public selectCountry = ['fr'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public http: Http) {
   }
 
   ionViewDidLoad() {
-    this.http.get(this.url).subscribe((response) => {
-      console.log(response);
-      console.log(response.json());
-      let data = response.json().results[0];
-      this.user.name = data.name.title + ' ' + data.name.first + ' ' + data.name.last;
-      this.user.image = data.picture.large;
+    this.loadUsers((data) => {
+      this.userList = data;
     });
-    this.loadUsers();
   }
 
+  /**
+   * 
+   * @param pos 
+   */
   showUsers(pos) {
     this.userSelectedIndex = pos;
   }
 
-  loadUsers() {
-    this.http.get(this.url + '?results=10').subscribe((response) => {
-      this.userList = response.json().results;
-    });
+  /**
+   * 
+   * @param callback 
+   */
+  loadUsers(callback) {
+    let url = this.url + '?results=10';
+    url += '&gender='+ this.selectGender;
+    url += '&nat='+ this.selectCountry.join(',');
+
+    this.http.get(url).subscribe((response) => {
+      let data = response.json().results;
+      callback(data);
+    }
+    );
   }
 
+  /**
+   * 
+   * @param infiniteScroll 
+   */
   loadMore(infiniteScroll) {
-    this.http.get(this.url + '?results=10').subscribe((response) => {
-      this.userList = this.userList.concat(response.json().results);
+    this.loadUsers((data) => {
+      this.userList = this.userList.concat(data);
       infiniteScroll.complete();
     });
   }
 
+  /**
+   * 
+   * @param refresher 
+   */
   refreshUsers(refresher) {
-    this.http.get(this.url + '?results=10').subscribe((response) => {
-      this.userList = response.json().results.concat(this.userList);
+    this.loadUsers((data) => {
+      this.userList = data.concat(this.userList);
       refresher.complete();
     });
+  }
+
+  /**
+   * 
+   * @param code 
+   */
+  onCountry(code) {
+    console.log(code);
   }
 
 }
